@@ -28,12 +28,13 @@
       <version>${authlete.java.common.version}</version>
     </dependency>
 
+<!--
     <dependency>
       <groupId>com.authlete</groupId>
       <artifactId>authlete-java-jaxrs</artifactId>
       <version>${authlete.java.jaxrs.version}</version>
     </dependency>
-
+-->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>

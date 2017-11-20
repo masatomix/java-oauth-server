@@ -16,26 +16,21 @@
  */
 package com.authlete.jaxrs.server.api;
 
-
 import com.authlete.common.dto.Property;
 import com.authlete.common.types.User;
 import com.authlete.jaxrs.server.db.UserDao;
-import com.authlete.jaxrs.spi.TokenRequestHandlerSpiAdapter;
-
+import com.authlete.jaxrs.spi.TokenRequestHandlerSpi;
 
 /**
  * Implementation of {@link com.authlete.jaxrs.spi.TokenRequestHandlerSpi
- * TokenRequestHandlerSpi} interface which needs to be given to the
- * constructor of {@link com.authlete.jaxrs.TokenRequestHandler
- * TokenRequestHandler}.
+ * TokenRequestHandlerSpi} interface which needs to be given to the constructor
+ * of {@link com.authlete.jaxrs.TokenRequestHandler TokenRequestHandler}.
  *
  * @author Takahiko Kawasaki
  */
-class TokenRequestHandlerSpiImpl extends TokenRequestHandlerSpiAdapter
-{
+class TokenRequestHandlerSpiImpl implements TokenRequestHandlerSpi {
     @Override
-    public String authenticateUser(String username, String password)
-    {
+    public String authenticateUser(String username, String password) {
         // Note: this method needs to be implemented only when you
         // want to support "Resource Owner Password Credentials Grant".
 
@@ -43,8 +38,7 @@ class TokenRequestHandlerSpiImpl extends TokenRequestHandlerSpiAdapter
         User user = UserDao.getByCredentials(username, password);
 
         // If not found.
-        if (user == null)
-        {
+        if (user == null) {
             // There is no user who has the credentials.
             return null;
         }
@@ -53,10 +47,8 @@ class TokenRequestHandlerSpiImpl extends TokenRequestHandlerSpiAdapter
         return user.getSubject();
     }
 
-
     @Override
-    public Property[] getProperties()
-    {
+    public Property[] getProperties() {
         // Properties returned from this method will be associated with an
         // access token that will be issued as a result of the token request.
         return null;

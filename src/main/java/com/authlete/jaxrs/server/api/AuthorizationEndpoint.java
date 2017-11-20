@@ -21,14 +21,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.authlete.common.api.AuthleteApiFactory;
-import com.authlete.jaxrs.BaseAuthorizationEndpoint;
+import com.authlete.jaxrs.AuthorizationRequestHandler;
+import com.authlete.jaxrs.spi.AuthorizationRequestHandlerSpi;
 
 /**
  * An implementation of OAuth 2.0 authorization endpoint with OpenID Connect
@@ -55,7 +56,7 @@ import com.authlete.jaxrs.BaseAuthorizationEndpoint;
  * @author Takahiko Kawasaki
  */
 @Path("/api/authorization")
-public class AuthorizationEndpoint extends BaseAuthorizationEndpoint {
+public class AuthorizationEndpoint {
     /**
      * The authorization endpoint for {@code GET} method.
      *
@@ -104,7 +105,20 @@ public class AuthorizationEndpoint extends BaseAuthorizationEndpoint {
      */
     private Response handle(HttpServletRequest request,
             MultivaluedMap<String, String> parameters) {
-        return handle(AuthleteApiFactory.getDefaultApi(),
-                new AuthorizationRequestHandlerSpiImpl(request), parameters);
+
+        try {
+            // Create a handler.
+            AuthorizationRequestHandler handler = new AuthorizationRequestHandler(
+                    new AuthorizationRequestHandlerSpiImpl(request));
+            // Delegate the task to the handler.
+            return handler.handle(parameters);
+        } catch (WebApplicationException e) {
+            // An error occurred in the handler.
+            e.printStackTrace();
+
+            // Convert the error to a Response.
+            return e.getResponse();
+        }
     }
+
 }

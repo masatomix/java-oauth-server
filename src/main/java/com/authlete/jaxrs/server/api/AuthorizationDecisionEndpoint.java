@@ -30,10 +30,10 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import com.authlete.common.api.AuthleteApiFactory;
 import com.authlete.common.types.User;
-import com.authlete.jaxrs.BaseAuthorizationDecisionEndpoint;
+import com.authlete.jaxrs.AuthorizationDecisionHandler;
 import com.authlete.jaxrs.server.db.UserDao;
+import com.authlete.jaxrs.spi.AuthorizationDecisionHandlerSpi;
 
 /**
  * The endpoint that receives a request from the form in the authorization page.
@@ -41,8 +41,7 @@ import com.authlete.jaxrs.server.db.UserDao;
  * @author Takahiko Kawasaki
  */
 @Path("/api/authorization/decision")
-public class AuthorizationDecisionEndpoint
-        extends BaseAuthorizationDecisionEndpoint {
+public class AuthorizationDecisionEndpoint {
     /**
      * Process a request from the form in the authorization page.
      *
@@ -78,11 +77,22 @@ public class AuthorizationDecisionEndpoint
         User user = getUser(session, parameters);
         Date authTime = (Date) session.getAttribute("authTime");
 
-        // Handle the end-user's decision.
-        return handle(AuthleteApiFactory.getDefaultApi(),
-                new AuthorizationDecisionHandlerSpiImpl(parameters, user,
-                        authTime),
-                ticket, claimNames, claimLocales);
+        try {
+            // Create a handler.
+            AuthorizationDecisionHandler handler = new AuthorizationDecisionHandler(
+                    new AuthorizationDecisionHandlerSpiImpl(parameters, user,
+                            authTime));
+
+            // Delegate the task to the handler.
+            return handler.handle(ticket, claimNames, claimLocales);
+        } catch (WebApplicationException e) {
+            // An error occurred in the handler.
+
+            e.printStackTrace();
+
+            // Convert the error to a Response.
+            return e.getResponse();
+        }
     }
 
     /**
@@ -149,4 +159,5 @@ public class AuthorizationDecisionEndpoint
         // Return the value of the attribute.
         return value;
     }
+
 }
