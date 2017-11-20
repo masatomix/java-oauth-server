@@ -33,7 +33,8 @@ import javax.ws.rs.core.Response.Status;
 import com.authlete.common.types.User;
 import com.authlete.jaxrs.AuthorizationDecisionHandler;
 import com.authlete.jaxrs.server.db.UserDao;
-import com.authlete.jaxrs.spi.AuthorizationDecisionHandlerSpi;
+
+import nu.mine.kino.servlets.HttpServletRequestManager;
 
 /**
  * The endpoint that receives a request from the form in the authorization page.
@@ -65,8 +66,10 @@ public class AuthorizationDecisionEndpoint {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response post(@Context HttpServletRequest request,
             MultivaluedMap<String, String> parameters) {
+
+        HttpServletRequest myReq = HttpServletRequestManager.getInstance();
         // Get the existing session.
-        HttpSession session = getSession(request);
+        HttpSession session = getSession(myReq);
 
         // Retrieve some variables from the session. See the implementation
         // of AuthorizationRequestHandlerSpiImpl.getAuthorizationPage().

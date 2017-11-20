@@ -29,7 +29,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.authlete.jaxrs.AuthorizationRequestHandler;
-import com.authlete.jaxrs.spi.AuthorizationRequestHandlerSpi;
+
+import nu.mine.kino.servlets.HttpServletRequestManager;
 
 /**
  * An implementation of OAuth 2.0 authorization endpoint with OpenID Connect
@@ -106,10 +107,12 @@ public class AuthorizationEndpoint {
     private Response handle(HttpServletRequest request,
             MultivaluedMap<String, String> parameters) {
 
+        HttpServletRequest myReq = HttpServletRequestManager.getInstance();
+
         try {
             // Create a handler.
             AuthorizationRequestHandler handler = new AuthorizationRequestHandler(
-                    new AuthorizationRequestHandlerSpiImpl(request));
+                    new AuthorizationRequestHandlerSpiImpl(myReq));
             // Delegate the task to the handler.
             return handler.handle(parameters);
         } catch (WebApplicationException e) {
