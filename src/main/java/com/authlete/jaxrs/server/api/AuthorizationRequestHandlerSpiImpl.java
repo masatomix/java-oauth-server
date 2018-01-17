@@ -95,6 +95,9 @@ class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHandlerSpiA
         session.setAttribute("ticket",       info.getTicket());
         session.setAttribute("claimNames",   info.getClaims());
         session.setAttribute("claimLocales", info.getClaimsLocales());
+        
+
+        System.out.println("Ticket: "+ info.getTicket());
 
         // Clear the current user information in the session if necessary.
         clearCurrentUserInfoInSessionIfNecessary(info, session);
