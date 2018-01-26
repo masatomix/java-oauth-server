@@ -31,7 +31,7 @@ import com.authlete.jaxrs.spi.TokenRequestHandlerSpiAdapter;
  *
  * @author Takahiko Kawasaki
  */
-class TokenRequestHandlerSpiImpl extends TokenRequestHandlerSpiAdapter
+public class TokenRequestHandlerSpiImpl extends TokenRequestHandlerSpiAdapter
 {
     @Override
     public String authenticateUser(String username, String password)

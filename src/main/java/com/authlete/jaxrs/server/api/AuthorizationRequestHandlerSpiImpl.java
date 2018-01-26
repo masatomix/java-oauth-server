@@ -54,7 +54,7 @@ import com.authlete.jaxrs.spi.AuthorizationRequestHandlerSpiAdapter;
  *
  * @author Takahiko Kawasaki
  */
-class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHandlerSpiAdapter
+public class AuthorizationRequestHandlerSpiImpl extends AuthorizationRequestHandlerSpiAdapter
 {
     /**
      * {@code "text/html;charset=UTF-8"}
