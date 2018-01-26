@@ -38,7 +38,7 @@ import com.authlete.jaxrs.spi.AuthorizationDecisionHandlerSpiAdapter;
  *
  * @author Takahiko Kawasaki
  */
-class AuthorizationDecisionHandlerSpiImpl extends AuthorizationDecisionHandlerSpiAdapter
+public class AuthorizationDecisionHandlerSpiImpl extends AuthorizationDecisionHandlerSpiAdapter
 {
     /**
      * The flag to indicate whether the client application has been granted
